@@ -25,5 +25,18 @@ app.use("/admins", admins)
 app.use(cors());
 app.use(bodyParser.json());
 
+app.use((err, req, res, next) => {
+  const error = app.get("env") === "development" ? err : {};
+  const status = err.status || 500;
+  // Respond to client
+  res.status(status).json({
+    error: {
+      message: error.message,
+    },
+  });
+
+  // Respond to ourselves
+  console.error(err);
+});
 
 exports.app = functions.https.onRequest(app);
