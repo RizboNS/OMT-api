@@ -34,22 +34,17 @@ module.exports = {
       email: Joi.string().email().required(),
       password: Joi.string().min(6).required(),
     }),
-    employeeSchema: Joi.object().keys({
+    userSchema: Joi.object().keys({
       fullName: Joi.string().min(2).max(255).required(),
       employeeId: Joi.string().min(8).max(8).required(),
       email: Joi.string().email().max(255).required(),
       password: Joi.string().min(6).max(255).required(),
     }),
-    employeeOptionalSchema: Joi.object().keys({
+    userOptionalSchema: Joi.object().keys({
       fullName: Joi.string().min(2).max(255),
       employeeId: Joi.string().min(8).max(8),
       email: Joi.string().email().max(255),
       password: Joi.string().min(6).max(255),
-    }),
-    employeeOptionalSchemaFind: Joi.object().keys({
-      fullName: Joi.string().min(2).max(255),
-      employeeId: Joi.string().min(8).max(8),
-      email: Joi.string().email().max(255),
     }),
     idSchema: Joi.object().keys({
       param: Joi.string().regex(/^[0-9a-fA-F]{24}$/),

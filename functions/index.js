@@ -18,10 +18,10 @@ mongoose
   .catch((err) => console.log(err));
 
 // Routes
-const admins = require("./routes/admins");
+const users = require("./routes/users");
 
 // Routes
-app.use("/admins", admins);
+app.use("/users", users);
 
 // Middlewares
 app.use(helmet());

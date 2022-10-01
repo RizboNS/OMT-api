@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const employeeSchema = new Schema({
+const userSchema = new Schema({
   fullName: {
     type: String,
     required: true,
@@ -25,6 +25,11 @@ const employeeSchema = new Schema({
     max: 255,
     min: 6,
   },
+  role: {
+    type: String,
+    required: true,
+    max: 10,
+  },
   ordersEdited: [
     {
       type: Schema.Types.ObjectId,
@@ -33,5 +38,5 @@ const employeeSchema = new Schema({
   ],
 });
 
-const Employee = mongoose.model("employee", employeeSchema);
-module.exports = Employee;
+const User = mongoose.model("user", userSchema);
+module.exports = User;
