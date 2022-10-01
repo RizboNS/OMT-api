@@ -19,9 +19,11 @@ mongoose
 
 // Routes
 const users = require("./routes/users");
+const customers = require("./routes/customers");
 
 // Routes
 app.use("/users", users);
+app.use("/customers", customers);
 
 // Middlewares
 app.use(helmet());

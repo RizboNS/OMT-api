@@ -1,7 +1,6 @@
 const User = require("../models/user");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const { user } = require("firebase-functions/v1/auth");
 
 module.exports = {
   createAdmin: async (req, res) => {
@@ -80,7 +79,7 @@ module.exports = {
     const field = keys[0];
     const fieldValue = fields[field];
 
-    const user = await User.findOne({ [field]: fieldValue });
+    const user = await User.findOne({ [field]: new RegExp(fieldValue, "i") });
     if (!user) {
       return res.status(404).json({ error: "User does not exist." });
     }
