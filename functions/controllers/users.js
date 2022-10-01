@@ -65,6 +65,27 @@ module.exports = {
     const users = await User.find();
     res.status(200).json(users);
   },
+  getUser: async (req, res) => {
+    const userId = req.value.params.userId;
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ error: "User does not exist." });
+    }
+    res.status(200).json(user);
+  },
+  findUserByField: async (req, res) => {
+    const fields = req.value.body;
+    const keys = Object.keys(fields);
+
+    const field = keys[0];
+    const fieldValue = fields[field];
+
+    const user = await User.findOne({ [field]: fieldValue });
+    if (!user) {
+      return res.status(404).json({ error: "User does not exist." });
+    }
+    res.status(200).json(user);
+  },
   updateUser: async (req, res) => {
     const userId = req.value.params.userId;
     const newUser = req.value.body;

@@ -25,7 +25,17 @@ router
   .post([isAdmin, validateBody(schemas.userSchema)], UserController.createUser);
 
 router
+  .route("/by-field")
+  .get(
+    [hasTokken, validateBody(schemas.userOptionalSchemaFind)],
+    UserController.findUserByField
+  );
+router
   .route("/:userId")
+  .get(
+    [hasTokken, validateParam(schemas.idSchema, "userId")],
+    UserController.getUser
+  )
   .patch(
     [
       isAdmin,
