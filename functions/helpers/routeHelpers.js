@@ -71,6 +71,20 @@ module.exports = {
       state: Joi.string().max(255),
       zip: Joi.string().max(5).min(5),
     }),
+    productSchema: Joi.object().keys({
+      name: Joi.string().max(30).required(),
+      productNumber: Joi.string().max(8).min(8).required(),
+      boxSize: Joi.string().max(255).required(),
+      weight: Joi.string().max(255).required(),
+      description: Joi.string().max(255).required(),
+    }),
+    productSchemaOptional: Joi.object().keys({
+      name: Joi.string().max(30),
+      productNumber: Joi.string().max(8).min(8),
+      boxSize: Joi.string().max(255),
+      weight: Joi.string().max(255),
+      description: Joi.string().max(255),
+    }),
     idSchema: Joi.object().keys({
       param: Joi.string().regex(/^[0-9a-fA-F]{24}$/),
     }),

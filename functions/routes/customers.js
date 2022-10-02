@@ -1,6 +1,6 @@
 const router = require("express-promise-router")();
 const CustomerControler = require("../controllers/customers");
-const { hasTokken, isAdmin } = require("../routes/verifyToken");
+const { hasTokken } = require("../routes/verifyToken");
 const {
   validateParam,
   schemas,
