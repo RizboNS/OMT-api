@@ -28,5 +28,17 @@ router
   .get(
     [hasTokken, validateParam(schemas.idSchema, "customerId")],
     CustomerControler.getCustomer
+  )
+  .patch(
+    [
+      hasTokken,
+      validateParam(schemas.idSchema, "customerId"),
+      validateBody(schemas.customerOptionalSchema),
+    ],
+    CustomerControler.updateCustomer
+  )
+  .delete(
+    [hasTokken, validateParam(schemas.idSchema, "customerId")],
+    CustomerControler.deleteCustomer
   );
 module.exports = router;

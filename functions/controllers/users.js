@@ -93,7 +93,7 @@ module.exports = {
     if (!user) {
       return res.status(404).json({ error: "User does not exist." });
     }
-    res.status(200).json(user);
+    res.status(200).json({ success: true });
   },
   deleteUser: async (req, res) => {
     const userId = req.value.params.userId;
@@ -104,6 +104,6 @@ module.exports = {
     }
     await user.remove();
 
-    res.status(200).send({ success: true });
+    res.status(200).json({ success: true });
   },
 };

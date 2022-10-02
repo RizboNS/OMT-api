@@ -24,12 +24,27 @@ const customerSchema = new Schema({
     required: true,
     max: 20,
   },
-  address: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "shipTo",
-    },
-  ],
+  address: {
+    type: String,
+    reqruired: true,
+    max: 255,
+  },
+  city: {
+    type: String,
+    required: true,
+    max: 255,
+  },
+  state: {
+    type: String,
+    required: true,
+    max: 255,
+  },
+  zip: {
+    type: String,
+    required: true,
+    max: 5,
+    min: 5,
+  },
 });
 
 const Customer = mongoose.model("customer", customerSchema);

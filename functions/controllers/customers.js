@@ -1,5 +1,4 @@
 const Customer = require("../models/customer");
-const ShipTo = require("../models/shipTo");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
@@ -10,21 +9,7 @@ module.exports = {
     if (emailExist) {
       return res.status(400).json({ error: "Email already exists." });
     }
-    const newShipTo = new ShipTo({
-      address: req.value.body.address,
-      city: req.value.body.city,
-      state: req.value.body.state,
-      zip: req.value.body.zip,
-    });
-    const savedShiptTo = await newShipTo.save();
-
-    const newCustomer = new Customer({
-      name: req.value.body.name,
-      lastName: req.value.body.lastName,
-      email: req.value.body.email,
-      phone: req.value.body.phone,
-      address: [savedShiptTo._id],
-    });
+    const newCustomer = new Customer(req.value.body);
     const savedCustomer = await newCustomer.save();
     if (!savedCustomer) {
       return res.status(400).json({ error: "Failed to create customer" });
@@ -59,8 +44,23 @@ module.exports = {
     }
     res.status(200).json(customer);
   },
-  //   TO DO
-  // patch customer (with address as well...)
-  // delete customer
-  //   For simplicity rethink if shipto should be separated from customer as it is only used buy customer.
+  updateCustomer: async (req, res) => {
+    const customerId = req.value.params.customerId;
+    const newCustomer = req.value.body;
+    const customer = await Customer.findByIdAndUpdate(customerId, newCustomer);
+    if (!customer) {
+      return res.status(404).json({ error: "Customer does not exist." });
+    }
+    res.status(200).json({ success: true });
+  },
+  deleteCustomer: async (req, res) => {
+    const customerId = req.value.params.customerId;
+    const customer = await Customer.findById(customerId);
+
+    if (!customer) {
+      return res.status(404).json({ error: "Customer does not exist" });
+    }
+    await customer.remove();
+    res.status(200).json({ success: true });
+  },
 };
