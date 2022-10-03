@@ -85,6 +85,18 @@ module.exports = {
       weight: Joi.string().max(255),
       description: Joi.string().max(255),
     }),
+    stockingLocationSchema: Joi.object().keys({
+      address: Joi.string().max(255).required(),
+      city: Joi.string().max(255).required(),
+      state: Joi.string().max(255).required(),
+      zip: Joi.string().max(5).min(5).required(),
+    }),
+    stockingLocationOptionalSchema: Joi.object().keys({
+      address: Joi.string().max(255),
+      city: Joi.string().max(255),
+      state: Joi.string().max(255),
+      zip: Joi.string().max(5).min(5),
+    }),
     idSchema: Joi.object().keys({
       param: Joi.string().regex(/^[0-9a-fA-F]{24}$/),
     }),

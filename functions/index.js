@@ -21,11 +21,13 @@ mongoose
 const users = require("./routes/users");
 const customers = require("./routes/customers");
 const products = require("./routes/products");
+const stockingLocations = require("./routes/stockingLocations");
 
 // Routes
 app.use("/users", users);
 app.use("/customers", customers);
 app.use("/products", products);
+app.use("/stocking-locations", stockingLocations);
 
 // Middlewares
 app.use(helmet());
