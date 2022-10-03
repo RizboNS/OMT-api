@@ -22,12 +22,14 @@ const users = require("./routes/users");
 const customers = require("./routes/customers");
 const products = require("./routes/products");
 const stockingLocations = require("./routes/stockingLocations");
+const orders = require("./routes/orders");
 
 // Routes
 app.use("/users", users);
 app.use("/customers", customers);
 app.use("/products", products);
 app.use("/stocking-locations", stockingLocations);
+app.use("/orders", orders);
 
 // Middlewares
 app.use(helmet());

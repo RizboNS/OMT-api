@@ -97,6 +97,13 @@ module.exports = {
       state: Joi.string().max(255),
       zip: Joi.string().max(5).min(5),
     }),
+    orderSchema: Joi.object().keys({
+      status: Joi.string().max(255).required(),
+      createdBy: Joi.string().max(255).required(),
+    }),
+    orderOptionalSchema: Joi.object().keys({
+      status: Joi.string().max(255),
+    }),
     idSchema: Joi.object().keys({
       param: Joi.string().regex(/^[0-9a-fA-F]{24}$/),
     }),
