@@ -3,10 +3,12 @@ const Schema = mongoose.Schema;
 
 const orderSchema = new Schema(
   {
-    customer: {
-      type: Schema.Types.ObjectId,
-      ref: "customer",
-    },
+    customer: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "customer",
+      },
+    ],
     stockingLocation: {
       type: Schema.Types.ObjectId,
       ref: "stockingLocation",
@@ -20,10 +22,36 @@ const orderSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "user",
     },
-    updatedBy: {
+    closedBy: {
       type: Schema.Types.ObjectId,
       ref: "user",
     },
+    canceledBy: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+    },
+    processedBy: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+    },
+    userOwner: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "user",
+      },
+    ],
+    updatedBy: [
+      {
+        id: {
+          type: Schema.Types.ObjectId,
+          ref: "user",
+        },
+        updatedTime: {
+          type: Date,
+          default: Date.now(),
+        },
+      },
+    ],
   },
   {
     timestamps: true,
