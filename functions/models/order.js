@@ -9,6 +9,18 @@ const orderSchema = new Schema(
         ref: "customer",
       },
     ],
+    notes: [
+      {
+        notedBy: {
+          type: Schema.Types.ObjectId,
+          ref: "user",
+        },
+        content: {
+          type: String,
+          max: 255,
+        },
+      },
+    ],
     stockingLocation: {
       type: Schema.Types.ObjectId,
       ref: "stockingLocation",

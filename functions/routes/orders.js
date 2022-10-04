@@ -21,4 +21,20 @@ router
     OrderControler.openOrder
   );
 
+router
+  .route("/close-order/:orderId")
+  .patch([
+    hasTokken,
+    validateParam(schemas.idSchema, "orderId"),
+    OrderControler.closeOrder,
+  ]);
+
+router
+  .route("/cancel-order/:orderId")
+  .patch([
+    hasTokken,
+    validateParam(schemas.idSchema, "orderId"),
+    OrderControler.cancelOrder,
+  ]);
+
 module.exports = router;
