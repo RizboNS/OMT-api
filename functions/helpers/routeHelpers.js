@@ -97,6 +97,21 @@ module.exports = {
       state: Joi.string().max(255),
       zip: Joi.string().max(5).min(5),
     }),
+    orderOptionalSchema: Joi.object().keys({
+      status: Joi.string().max(255),
+      createdBy: Joi.string().regex(/^[0-9a-fA-F]{24}$/),
+      userOwner: Joi.string().regex(/^[0-9a-fA-F]{24}$/),
+      updatedBy: Joi.string().regex(/^[0-9a-fA-F]{24}$/),
+      customer: Joi.string().regex(/^[0-9a-fA-F]{24}$/),
+      updatedAt: Joi.object().keys({
+        time: Joi.string().max(255),
+        compareBy: Joi.string().max(255),
+      }),
+      createdAt: Joi.object().keys({
+        time: Joi.string().max(255),
+        compareBy: Joi.string().max(255),
+      }),
+    }),
     idSchema: Joi.object().keys({
       param: Joi.string().regex(/^[0-9a-fA-F]{24}$/),
     }),

@@ -7,6 +7,22 @@ const {
   validateBody,
 } = require("../helpers/routeHelpers");
 
+router.route("/").get(hasTokken, OrderControler.getAllOrders);
+
+router
+  .route("/by-field")
+  .get(
+    [hasTokken, validateBody(schemas.orderOptionalSchema)],
+    OrderControler.findOrdersByField
+  );
+
+router
+  .route("/:orderId")
+  .get(
+    [hasTokken, validateParam(schemas.idSchema, "orderId")],
+    OrderControler.getOrder
+  );
+
 router
   .route("/create-order/:customerId")
   .post(
@@ -35,6 +51,22 @@ router
     hasTokken,
     validateParam(schemas.idSchema, "orderId"),
     OrderControler.cancelOrder,
+  ]);
+
+router
+  .route("/fulfill-order/:orderId")
+  .patch([
+    hasTokken,
+    validateParam(schemas.idSchema, "orderId"),
+    OrderControler.fulfillOrder,
+  ]);
+
+router
+  .route("/process-order/:orderId")
+  .patch([
+    hasTokken,
+    validateParam(schemas.idSchema, "orderId"),
+    OrderControler.processOrder,
   ]);
 
 module.exports = router;

@@ -1,7 +1,60 @@
 const Order = require("../models/order");
 const Customer = require("../models/customer");
-const { date } = require("joi");
+
 module.exports = {
+  getAllOrders: async (req, res) => {
+    const orders = await Order.find();
+    res.status(200).json(orders);
+  },
+  getOrder: async (req, res) => {
+    const orderId = req.value.params.orderId;
+    const order = await Order.findById(orderId);
+
+    if (!order) {
+      return res.status(404).json({ error: "Order does not exist." });
+    }
+    res.status(200).json(order);
+  },
+  findOrdersByField: async (req, res) => {
+    const fields = req.value.body;
+    const keys = Object.keys(fields);
+
+    const field = keys[0];
+    const fieldValue = fields[field];
+    let findObj = {};
+    if (field == "updatedAt" || field == "createdAt") {
+      const compareBy = fields[field].compareBy;
+      const time = fields[field].time;
+      if (compareBy != undefined) {
+        findObj = {
+          [field]: {
+            [compareBy]: time,
+          },
+        };
+      } else {
+        findObj = {
+          [field]: time,
+        };
+      }
+    } else if (field == "updatedBy") {
+      findObj = {
+        "updatedBy._id": fieldValue,
+      };
+    } else if (field == "customer") {
+      findObj = {
+        customer: fieldValue,
+      };
+    } else {
+      findObj = {
+        [field]: new RegExp(fieldValue, "i"),
+      };
+    }
+    const orders = await Order.find(findObj);
+    if (!orders) {
+      return res.status(404).json({ error: "Orders not found." });
+    }
+    res.status(200).json(orders);
+  },
   createOrder: async (req, res) => {
     const userId = req.user._id;
     const customerId = req.value.params.customerId;
@@ -97,6 +150,47 @@ module.exports = {
     if (!order) {
       return res.status(400).json({ error: "Failed to cancel order." });
     }
+    res.status(200).json(order);
+  },
+  fulfillOrder: async (req, res) => {
+    const orderId = req.value.params.orderId;
+    const userId = req.user._id;
+    const order = await Order.findById(orderId);
+
+    order.status = "fulfilled";
+    order.updatedBy.push(userId);
+    order.updatedBy.push({
+      _id: userId,
+      note: "Order fulfilled with note: " + req.body.note,
+    });
+    if (order.userOwner.length > 0) {
+      order.userOwner.pop();
+    }
+    await order.save();
+    if (!order) {
+      return res.status(400).json({ error: "Failed to fulfill order." });
+    }
+    res.status(200).json(order);
+  },
+  processOrder: async (req, res) => {
+    const orderId = req.value.params.orderId;
+    const userId = req.user._id;
+    const order = await Order.findById(orderId);
+
+    order.status = "processed";
+    order.updatedBy.push(userId);
+    order.updatedBy.push({
+      _id: userId,
+      note: "Order processed with note: " + req.body.note,
+    });
+    if (order.userOwner.length > 0) {
+      order.userOwner.pop();
+    }
+    await order.save();
+    if (!order) {
+      return res.status(400).json({ error: "Failed to process order." });
+    }
+    // SEND ORDER TO CARRIER METHOD HERE
     res.status(200).json(order);
   },
 };
