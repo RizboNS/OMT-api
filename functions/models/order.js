@@ -9,18 +9,6 @@ const orderSchema = new Schema(
         ref: "customer",
       },
     ],
-    notes: [
-      {
-        notedBy: {
-          type: Schema.Types.ObjectId,
-          ref: "user",
-        },
-        content: {
-          type: String,
-          max: 255,
-        },
-      },
-    ],
     stockingLocation: {
       type: Schema.Types.ObjectId,
       ref: "stockingLocation",
@@ -54,13 +42,17 @@ const orderSchema = new Schema(
     ],
     updatedBy: [
       {
-        id: {
+        _id: {
           type: Schema.Types.ObjectId,
           ref: "user",
         },
         updatedTime: {
           type: Date,
           default: Date.now(),
+        },
+        note: {
+          type: String,
+          max: 255,
         },
       },
     ],

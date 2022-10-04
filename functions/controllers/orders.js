@@ -3,6 +3,7 @@ const Customer = require("../models/customer");
 const { date } = require("joi");
 module.exports = {
   createOrder: async (req, res) => {
+    const userId = req.user._id;
     const customerId = req.value.params.customerId;
     const customer = await Customer.findById(customerId);
     if (!customer) {
@@ -11,11 +12,11 @@ module.exports = {
         .json({ error: "Failed to create order - Customer error." });
     }
     const newOrder = new Order({
-      createdBy: req.user._id,
+      createdBy: userId,
       status: "pending",
     });
     newOrder.customer = customer._id;
-    newOrder.updatedBy.push({ id: req.user.id });
+    newOrder.updatedBy.push({ _id: userId, note: "Order created." });
     const savedOrder = await newOrder.save();
     if (!savedOrder) {
       return res.status(400).json({ error: "Failed to create order." });
@@ -37,14 +38,13 @@ module.exports = {
       });
     }
     order.status = "open";
-    order.updatedBy.push(userId);
     if (order.userOwner.length > 0) {
       order.userOwner.pop();
     }
     order.userOwner.push(userId);
-    order.notes.push({
-      notedBy: userId,
-      content: "Order is now open.",
+    order.updatedBy.push({
+      _id: userId,
+      note: "Order status changed to 'open'.",
     });
     await order.save();
     if (!order) {
@@ -66,10 +66,9 @@ module.exports = {
       });
     }
     order.status = "closed";
-    order.updatedBy.push(userId);
-    order.notes.push({
-      notedBy: userId,
-      content: req.body.note,
+    order.updatedBy.push({
+      _id: userId,
+      note: "Order status changed to 'closed' with note: " + req.body.note,
     });
     if (order.userOwner.length > 0) {
       order.userOwner.pop();
@@ -87,9 +86,9 @@ module.exports = {
 
     order.status = "cancelled";
     order.updatedBy.push(userId);
-    order.notes.push({
-      notedBy: userId,
-      content: req.body.note,
+    order.updatedBy.push({
+      _id: userId,
+      note: "Order cancelled with note: " + req.body.note,
     });
     if (order.userOwner.length > 0) {
       order.userOwner.pop();
