@@ -25,7 +25,7 @@ const stockingLocationSchema = new Schema({
   },
   productsInStock: [
     {
-      product: {
+      _id: {
         type: Schema.Types.ObjectId,
         ref: "product",
       },

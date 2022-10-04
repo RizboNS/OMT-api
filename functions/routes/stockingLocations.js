@@ -10,6 +10,17 @@ const {
 router.route("/").get(hasTokken, StockingLocationControler.getAllLocations);
 
 router
+  .route("/add-stock/:locationId")
+  .patch(
+    [
+      hasTokken,
+      validateBody(schemas.stockSchema),
+      validateParam(schemas.idSchema, "locationId"),
+    ],
+    StockingLocationControler.addStock
+  );
+
+router
   .route("/create-stocking-location")
   .post(
     [isAdmin, validateBody(schemas.stockingLocationSchema)],

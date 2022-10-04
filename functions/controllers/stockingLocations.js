@@ -70,4 +70,19 @@ module.exports = {
     await location.remove();
     res.status(200).json({ success: true });
   },
+  addStock: async (req, res) => {
+    const locationId = req.value.params.locationId;
+    const location = await StockingLocation.findById(locationId);
+    const newProduct = req.value.body;
+
+    if (!location) {
+      res.status(404).json({ error: "Stocking location not found." });
+    }
+
+    // const product = location.productsInStock.find((value) => value._id == newProduct._id));
+    console.log(product);
+    location.productsInStock.push(newProduct);
+    await location.save();
+    res.status(200).json(location);
+  },
 };

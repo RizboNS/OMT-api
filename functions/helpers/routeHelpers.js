@@ -112,6 +112,10 @@ module.exports = {
         compareBy: Joi.string().max(255),
       }),
     }),
+    stockSchema: Joi.object().keys({
+      _id: Joi.string().regex(/^[0-9a-fA-F]{24}$/),
+      quantity: Joi.number(),
+    }),
     idSchema: Joi.object().keys({
       param: Joi.string().regex(/^[0-9a-fA-F]{24}$/),
     }),
