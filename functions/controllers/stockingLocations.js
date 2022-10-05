@@ -70,6 +70,32 @@ module.exports = {
     await location.remove();
     res.status(200).json({ success: true });
   },
+  getStock: async (req, res) => {
+    const productId = req.value.params.productId;
+    let stock = [];
+    const stockLocationsWithStock = await StockingLocation.find({
+      "productsInStock._id": productId,
+    });
+
+    stockLocationsWithStock.forEach((stockingLocation) => {
+      stockingLocation.productsInStock.forEach((el) => {
+        if (el._id == productId) {
+          stock.push({
+            _id: el._id,
+            quantity: el.quantity,
+            stockingLocationInfo: {
+              _id: stockingLocation._id,
+              address: stockingLocation.address,
+              city: stockingLocation.city,
+              state: stockingLocation.state,
+              zip: stockingLocation.zip,
+            },
+          });
+        }
+      });
+    });
+    res.status(200).json(stock);
+  },
   addStock: async (req, res) => {
     const locationId = req.value.params.locationId;
     const location = await StockingLocation.findById(locationId);
@@ -78,10 +104,22 @@ module.exports = {
     if (!location) {
       res.status(404).json({ error: "Stocking location not found." });
     }
-
-    // const product = location.productsInStock.find((value) => value._id == newProduct._id));
-    console.log(product);
-    location.productsInStock.push(newProduct);
+    let product;
+    let productIndex = 0;
+    for (let i = 0; i < location.productsInStock.length; i++) {
+      const element = location.productsInStock[i];
+      if (element._id == newProduct._id) {
+        product = element;
+        productIndex = i;
+        break;
+      }
+    }
+    if (product == undefined) {
+      location.productsInStock.push(newProduct);
+    } else {
+      product.quantity = product.quantity + newProduct.quantity;
+      location.productsInStock.splice(productIndex, 1, product);
+    }
     await location.save();
     res.status(200).json(location);
   },

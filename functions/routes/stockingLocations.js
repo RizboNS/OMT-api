@@ -10,6 +10,13 @@ const {
 router.route("/").get(hasTokken, StockingLocationControler.getAllLocations);
 
 router
+  .route("/stock/:productId")
+  .get(
+    [hasTokken, validateParam(schemas.idSchema, "productId")],
+    StockingLocationControler.getStock
+  );
+
+router
   .route("/add-stock/:locationId")
   .patch(
     [
