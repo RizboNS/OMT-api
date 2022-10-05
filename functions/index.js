@@ -8,6 +8,12 @@ const logger = require("morgan");
 require("dotenv/config");
 const app = express();
 
+// Middlewares
+app.use(cors());
+app.use(helmet());
+app.use(logger("tiny"));
+app.use(bodyParser.json());
+
 // DB
 mongoose
   .connect(process.env.DB_CONN, {
@@ -30,12 +36,6 @@ app.use("/customers", customers);
 app.use("/products", products);
 app.use("/stocking-locations", stockingLocations);
 app.use("/orders", orders);
-
-// Middlewares
-app.use(helmet());
-app.use(logger("tiny"));
-app.use(cors());
-app.use(bodyParser.json());
 
 // Catch 404 and forward to error handler
 app.use((req, res, next) => {
