@@ -99,6 +99,7 @@ module.exports = {
     }),
     orderOptionalSchema: Joi.object().keys({
       status: Joi.string().max(255),
+      product: Joi.string().regex(/^[0-9a-fA-F]{24}$/),
       createdBy: Joi.string().regex(/^[0-9a-fA-F]{24}$/),
       userOwner: Joi.string().regex(/^[0-9a-fA-F]{24}$/),
       updatedBy: Joi.string().regex(/^[0-9a-fA-F]{24}$/),

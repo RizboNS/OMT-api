@@ -11,7 +11,7 @@ router.route("/").get(hasTokken, OrderControler.getAllOrders);
 
 router
   .route("/by-field")
-  .get(
+  .post(
     [hasTokken, validateBody(schemas.orderOptionalSchema)],
     OrderControler.findOrdersByField
   );
@@ -26,7 +26,11 @@ router
 router
   .route("/create-order/:customerId")
   .post(
-    [hasTokken, validateParam(schemas.idSchema, "customerId")],
+    [
+      hasTokken,
+      validateParam(schemas.idSchema, "customerId"),
+      validateBody(schemas.orderOptionalSchema),
+    ],
     OrderControler.createOrder
   );
 

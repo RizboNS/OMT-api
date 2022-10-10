@@ -21,6 +21,7 @@ module.exports = {
 
     const field = keys[0];
     const fieldValue = fields[field];
+
     let findObj = {};
     if (field == "updatedAt" || field == "createdAt") {
       const compareBy = fields[field].compareBy;
@@ -45,9 +46,10 @@ module.exports = {
         customer: fieldValue,
       };
     } else {
-      findObj = {
-        [field]: new RegExp(fieldValue, "i"),
-      };
+      // findObj = {
+      //   [field]: new RegExp(fieldValue, "i"),
+      // };
+      findObj = fields;
     }
     const orders = await Order.find(findObj);
     if (!orders) {
@@ -67,6 +69,7 @@ module.exports = {
     const newOrder = new Order({
       createdBy: userId,
       status: "pending",
+      product: req.value.body.product,
     });
     newOrder.customer = customer._id;
     newOrder.updatedBy.push({ _id: userId, note: "Order created." });
